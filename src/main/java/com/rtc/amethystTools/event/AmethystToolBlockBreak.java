@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 import java.util.EnumSet;
 import java.util.Set;
 
-@SuppressWarnings({"FieldCanBeLocal", "unused", "RedundantIfStatement", "deprecation"})
+@SuppressWarnings({"FieldCanBeLocal", "unused", "RedundantIfStatement"})
 public class AmethystToolBlockBreak implements Listener {
 
     private final AmethystTools plugin;
@@ -50,15 +50,7 @@ public class AmethystToolBlockBreak implements Listener {
             Material.CRYING_OBSIDIAN,
             Material.COMMAND_BLOCK,
             Material.CHAIN_COMMAND_BLOCK,
-            Material.REPEATING_COMMAND_BLOCK,
-            Material.COPPER_CHEST,
-            Material.EXPOSED_COPPER_CHEST,
-            Material.WEATHERED_COPPER_CHEST,
-            Material.OXIDIZED_COPPER_CHEST,
-            Material.WAXED_COPPER_CHEST,
-            Material.WAXED_EXPOSED_COPPER_CHEST,
-            Material.WAXED_WEATHERED_COPPER_CHEST,
-            Material.WAXED_OXIDIZED_COPPER_CHEST
+            Material.REPEATING_COMMAND_BLOCK
     );
 
     @EventHandler
