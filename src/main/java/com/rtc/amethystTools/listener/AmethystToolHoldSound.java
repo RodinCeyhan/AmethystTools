@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-@SuppressWarnings({"RedundantIfStatement", "deprecation"})
+@SuppressWarnings({"RedundantIfStatement"})
 public class AmethystToolHoldSound implements Listener {
 
     private final AmethystTools plugin;

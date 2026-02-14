@@ -34,10 +34,9 @@ public class AmethystToolMainMenu implements Listener {
         inv.setItem(10, buildWoodenCategory(player));
         inv.setItem(11, buildStoneCategory(player));
         inv.setItem(12, buildIronCategory(player));
-        inv.setItem(13, buildCopperCategory(player));
-        inv.setItem(14, buildGoldCategory(player));
-        inv.setItem(15, buildDiamondCategory(player));
-        inv.setItem(16, buildNetheriteCategory(player));
+        inv.setItem(13, buildGoldCategory(player));
+        inv.setItem(14, buildDiamondCategory(player));
+        inv.setItem(15, buildNetheriteCategory(player));
 
         return inv;
     }
@@ -85,21 +84,6 @@ public class AmethystToolMainMenu implements Listener {
         item.setItemMeta(meta);
         return item;
     }
-
-    private ItemStack buildCopperCategory(Player player) {
-
-        Material material = Material.valueOf(String.valueOf(Material.COPPER_INGOT));
-
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-
-        String name = "&#C87533Copper Tools";
-        meta.setDisplayName(color(name));
-
-        item.setItemMeta(meta);
-        return item;
-    }
-
 
     private ItemStack buildGoldCategory(Player player) {
 
@@ -164,10 +148,9 @@ public class AmethystToolMainMenu implements Listener {
             case 10 -> player.openInventory(new AmethystToolWoodenMenu(plugin).create(player));
             case 11 -> player.openInventory(new AmethystToolStoneMenu(plugin).create(player));
             case 12 -> player.openInventory(new AmethystToolIronMenu(plugin).create(player));
-            case 13 -> player.openInventory(new AmethystToolCopperMenu(plugin).create(player));
-            case 14 -> player.openInventory(new AmethystToolGoldenMenu(plugin).create(player));
-            case 15 -> player.openInventory(new AmethystToolDiamondMenu(plugin).create(player));
-            case 16 -> player.openInventory(new AmethystToolNetheriteMenu(plugin).create(player));
+            case 13 -> player.openInventory(new AmethystToolGoldenMenu(plugin).create(player));
+            case 14 -> player.openInventory(new AmethystToolDiamondMenu(plugin).create(player));
+            case 15 -> player.openInventory(new AmethystToolNetheriteMenu(plugin).create(player));
             default -> {
             }
         }

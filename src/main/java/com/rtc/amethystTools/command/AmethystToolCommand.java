@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import java.util.List;
 public class AmethystToolCommand extends BukkitCommand {
 
     private static final List<String> TIER = Arrays.asList(
-            "wooden", "stone", "iron", "golden", "copper", "diamond", "netherite"
+            "wooden", "stone", "iron", "golden", "diamond", "netherite"
     );
     private static final List<String> TYPE = Arrays.asList(
             "pickaxe", "axe", "shovel"
@@ -77,7 +77,6 @@ public class AmethystToolCommand extends BukkitCommand {
                 case "wooden" -> "Wooden";
                 case "stone" -> "Stone";
                 case "iron" -> "Iron";
-                case "copper" -> "Copper";
                 case "diamond" -> "Diamond";
                 case "netherite" -> "Netherite";
                 case "golden" -> "Gold";
@@ -162,12 +161,6 @@ public class AmethystToolCommand extends BukkitCommand {
                 case "pickaxe" -> Material.IRON_PICKAXE;
                 case "axe" -> Material.IRON_AXE;
                 case "shovel" -> Material.IRON_SHOVEL;
-                default -> null;
-            };
-            case "copper" -> switch (type) {
-                case "pickaxe" -> Material.COPPER_PICKAXE;
-                case "axe" -> Material.COPPER_AXE;
-                case "shovel" -> Material.COPPER_SHOVEL;
                 default -> null;
             };
             case "golden" -> switch (type) {
