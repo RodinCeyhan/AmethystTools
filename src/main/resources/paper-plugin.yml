@@ -1,0 +1,6 @@
+name: AmethystTools
+version: '1.0'
+main: com.rtc.amethystTools.AmethystTools
+api-version: '1.21'
+folia-supported: true
+author: 'RodinToprak'

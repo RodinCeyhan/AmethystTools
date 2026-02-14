@@ -1,0 +1,17 @@
+messages:
+  only-players: "&cOnly players can use this command."
+  wrong-arg1: "&cPlease enter a valid material."
+  wrong-arg2: "&cPlease enter a valid tool."
+  empyt-arg2: "&cPlease enter an argument."
+  invfull: "&5{material} {tool} &ccould not be added to your inventory because it is full."
+  invfull-actionbar: "&cYour inventory is full!"
+  reloadplugin: "&aPlugin reload is succesfuly complete."
+  reloadplugin-actionbar: "&aReloaded Plugin"
+  nopermission: "&cYou don't have permission!"
+  nopermission-actionbar: "&cYou don't have permission!"
+
+item:
+  item-name: "&5ᴀᴍᴇᴛʜʏѕᴛ"
+  item-pickaxe: "&5ᴘɪᴄᴋᴀхᴇ"
+  item-axe: "&5ᴀхᴇ"
+  item-shovel: "&5ѕʜᴏᴠᴇʟ"
