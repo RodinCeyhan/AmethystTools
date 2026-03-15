@@ -37,7 +37,6 @@ public final class AmethystTools extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AmethystToolDiamondMenu(this), this);
         getServer().getPluginManager().registerEvents(new AmethystToolGoldenMenu(this), this);
         getServer().getPluginManager().registerEvents(new AmethystToolIronMenu(this), this);
-        getServer().getPluginManager().registerEvents(new AmethystToolCopperMenu(this), this);
         getServer().getPluginManager().registerEvents(new AmethystToolStoneMenu(this), this);
         getServer().getPluginManager().registerEvents(new AmethystToolWoodenMenu(this), this);
 

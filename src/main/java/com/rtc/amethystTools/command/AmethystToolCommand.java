@@ -13,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class AmethystToolCommand extends BukkitCommand {
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String @NonNull [] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String [] args) {
 
         if (!(sender instanceof Player player)) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.only-players", "&cOnly players can use this command.")));
@@ -135,7 +134,7 @@ public class AmethystToolCommand extends BukkitCommand {
     }
 
     @Override
-    public @NonNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String @NonNull [] args) {
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String [] args) {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String partial = args[0].toLowerCase();
@@ -172,12 +171,6 @@ public class AmethystToolCommand extends BukkitCommand {
                 case "pickaxe" -> Material.IRON_PICKAXE;
                 case "axe" -> Material.IRON_AXE;
                 case "shovel" -> Material.IRON_SHOVEL;
-                default -> null;
-            };
-            case "copper" -> switch (type) {
-                case "pickaxe" -> Material.COPPER_PICKAXE;
-                case "axe" -> Material.COPPER_AXE;
-                case "shovel" -> Material.COPPER_SHOVEL;
                 default -> null;
             };
             case "golden" -> switch (type) {
