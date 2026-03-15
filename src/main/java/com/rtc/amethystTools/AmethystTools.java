@@ -44,7 +44,6 @@ public final class AmethystTools extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AmethystToolHoldSound(this), this);
         getServer().getPluginManager().registerEvents(new AmethystToolBlockBreak(this), this);
 
-
         this.getServer().getCommandMap().register("amethysttools", new AmethystToolCommand(this));
         this.getServer().getCommandMap().register("amethysttoolsreload", new AmethystToolReloadCommand(this));
 

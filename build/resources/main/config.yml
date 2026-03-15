@@ -2,7 +2,7 @@ messages:
   only-players: "&cOnly players can use this command."
   wrong-arg1: "&cPlease enter a valid material."
   wrong-arg2: "&cPlease enter a valid tool."
-  empyt-arg2: "&cPlease enter an argument."
+  empyt-arg2: "&cPlease enter a tool type (pickaxe, axe, shovel)."
   invfull: "&5{material} {tool} &ccould not be added to your inventory because it is full."
   invfull-actionbar: "&cYour inventory is full!"
   reloadplugin: "&aPlugin reload is succesfuly complete."
@@ -15,3 +15,14 @@ item:
   item-pickaxe: "&5ᴘɪᴄᴋᴀхᴇ"
   item-axe: "&5ᴀхᴇ"
   item-shovel: "&5ѕʜᴏᴠᴇʟ"
+
+menus:
+  menu-main: "&5Amethyst Tools"
+  menu-wooden: "&#A0522DWooden Tools"
+  menu-stone: "&#7D7D7DStone Tools"
+  menu-iron: "&#DADADAIron Tools"
+  menu-copper: "&#C87533Copper Tools"
+  menu-golden: "&#FFD700Golden Tools"
+  menu-diamond: "&#4EE1D8Diamond Tools"
+  menu-netherite: "&#2B2B2FNetherite Tools"
+  item-previous: "&e<- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ"

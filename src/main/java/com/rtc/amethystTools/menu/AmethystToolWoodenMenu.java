@@ -4,11 +4,14 @@ import com.rtc.amethystTools.AmethystTools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -25,10 +28,18 @@ public class AmethystToolWoodenMenu implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings({"NullableProblems", "DataFlowIssue"})
+    public static class WoodenMenuHolder implements InventoryHolder {
+        @Override
+        public Inventory getInventory() {
+            return null;
+        }
+    }
+
     public Inventory create(Player player) {
         int size = 27;
-
-        Inventory inv = Bukkit.createInventory(null, size, MENU_TITLE);
+        String MENU_TITLE = plugin.getConfig().getString("menus.menu-wooden", "&#A0522DWooden Tools");
+        Inventory inv = Bukkit.createInventory(new WoodenMenuHolder(), size, color(MENU_TITLE));
 
         inv.setItem(12, buildPickaxe(player));
         inv.setItem(13, buildShovel(player));
@@ -44,10 +55,16 @@ public class AmethystToolWoodenMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
+        String materialname = plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ");
+        String materialpickaxe = plugin.getConfig().getString("item.item-pickaxe", "&5ᴘɪᴄᴋᴀхᴇ");
 
-        String name = "&5ᴀᴍᴇᴛʜʏѕᴛ ᴘɪᴄᴋᴀхᴇ";
-        meta.setDisplayName(color(name));
-        meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
+        String name = color(materialname + " " + materialpickaxe);
+        meta.setDisplayName(name);
+        meta.setLore(List.of("§7Breaks 9 Blocks at Once",
+                "",
+                color("&#FFFF00Click to get")));
+        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
         return item;
@@ -60,10 +77,16 @@ public class AmethystToolWoodenMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
+        String materialname = plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ");
+        String materialshovel = plugin.getConfig().getString("item.item-shovel", "&5ѕʜᴏᴠᴇʟ");
 
-        String name = "&5ᴀᴍᴇᴛʜʏѕᴛ ѕʜᴏᴠᴇʟ";
-        meta.setDisplayName(color(name));
-        meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
+        String name = color(materialname + " " + materialshovel);
+        meta.setDisplayName(name);
+        meta.setLore(List.of("§7Breaks 9 Blocks at Once",
+                "",
+                color("&#FFFF00Click to get")));
+        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
         return item;
@@ -76,10 +99,16 @@ public class AmethystToolWoodenMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
+        String materialname = plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ");
+        String materialaxe = plugin.getConfig().getString("item.item-axe", "&5ᴀхᴇ");
 
-        String name = "&5ᴀᴍᴇᴛʜʏѕᴛ ᴀхᴇ";
-        meta.setDisplayName(color(name));
-        meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
+        String name = color(materialname + " " + materialaxe);
+        meta.setDisplayName(name);
+        meta.setLore(List.of("§7Breaks 9 Blocks at Once",
+                "",
+                color("&#FFFF00Click to get")));
+        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
         return item;
@@ -91,24 +120,25 @@ public class AmethystToolWoodenMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
+        String previouspage = plugin.getConfig().getString("menus.item-previous", "&e<- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ");
 
-        String name = "&e<- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ";
-        meta.setDisplayName(color(name));
+        String name = color(previouspage);
+        meta.setDisplayName(name);
 
         item.setItemMeta(meta);
         return item;
     }
 
     @EventHandler
-    public void onClick(InventoryClickEvent e) {
+    public void onClick(InventoryClickEvent event) {
 
-        if (!(e.getWhoClicked() instanceof Player player)) return;
-        if (!e.getView().getTitle().equals(MENU_TITLE)) return;
-        if (e.getClickedInventory() == null) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (!(event.getInventory().getHolder() instanceof WoodenMenuHolder)) return;
+        if (event.getClickedInventory() == null) return;
 
-        e.setCancelled(true);
+        event.setCancelled(true);
 
-        switch (e.getSlot()) {
+        switch (event.getSlot()) {
             case 12 ->  {
                 player.performCommand("amethysttools wooden pickaxe");
                 player.closeInventory();
@@ -137,6 +167,4 @@ public class AmethystToolWoodenMenu implements Listener {
         }
         return ChatColor.translateAlternateColorCodes('&', text);
     }
-
-    private static final String MENU_TITLE = color("&#A0522DWooden Tools");
 }

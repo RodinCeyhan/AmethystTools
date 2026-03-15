@@ -4,13 +4,12 @@ import com.rtc.amethystTools.AmethystTools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,10 +25,18 @@ public class AmethystToolMainMenu implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings({"NullableProblems", "DataFlowIssue"})
+    public static class MainMenuHolder implements InventoryHolder {
+        @Override
+        public Inventory getInventory() {
+            return null;
+        }
+    }
+
     public Inventory create(Player player) {
         int size = 27;
-
-        Inventory inv = Bukkit.createInventory(null, size, MENU_TITLE);
+        String MENU_TITLE = plugin.getConfig().getString("menus.menu-main", "&5Amethyst Tools");
+        Inventory inv = Bukkit.createInventory(new MainMenuHolder(), size, color(MENU_TITLE));
 
         inv.setItem(10, buildWoodenCategory(player));
         inv.setItem(11, buildStoneCategory(player));
@@ -49,8 +56,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#A0522DWooden Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-wooden", "&#A0522DWooden Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -64,8 +71,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#7D7D7DStone Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-stone", "&#7D7D7DStone Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -79,8 +86,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#DADADAIron Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-iron", "&#DADADAIron Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -93,8 +100,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#C87533Copper Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-copper", "&#C87533Copper Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -108,8 +115,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#FFD700Golden Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-golden", "&#FFD700Golden Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -123,8 +130,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#4EE1D8Diamond Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-diamond", "&#4EE1D8Diamond Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -137,30 +144,23 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String name = "&#2B2B2FNetherite Tools";
-        meta.setDisplayName(color(name));
+        String itemname = plugin.getConfig().getString("menus.menu-netherite", "&#2B2B2FNetherite Tools");
+        meta.setDisplayName(color(itemname));
 
         item.setItemMeta(meta);
         return item;
     }
 
     @EventHandler
-    private void onClose(InventoryCloseEvent event) {
-        if (!event.getView().getTitle().equals(MENU_TITLE)) return;
-        Player player = (Player) event.getPlayer();
-        player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1.0f, 1.0f);
-    }
+    public void onClick(InventoryClickEvent event) {
 
-    @EventHandler
-    public void onClick(InventoryClickEvent e) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (!(event.getInventory().getHolder() instanceof MainMenuHolder)) return;
+        if (event.getClickedInventory() == null) return;
 
-        if (!(e.getWhoClicked() instanceof Player player)) return;
-        if (!e.getView().getTitle().equals(MENU_TITLE)) return;
-        if (e.getClickedInventory() == null) return;
+        event.setCancelled(true);
 
-        e.setCancelled(true);
-
-        switch (e.getSlot()) {
+        switch (event.getSlot()) {
             case 10 -> player.openInventory(new AmethystToolWoodenMenu(plugin).create(player));
             case 11 -> player.openInventory(new AmethystToolStoneMenu(plugin).create(player));
             case 12 -> player.openInventory(new AmethystToolIronMenu(plugin).create(player));
@@ -168,8 +168,6 @@ public class AmethystToolMainMenu implements Listener {
             case 14 -> player.openInventory(new AmethystToolGoldenMenu(plugin).create(player));
             case 15 -> player.openInventory(new AmethystToolDiamondMenu(plugin).create(player));
             case 16 -> player.openInventory(new AmethystToolNetheriteMenu(plugin).create(player));
-            default -> {
-            }
         }
     }
 
@@ -185,6 +183,4 @@ public class AmethystToolMainMenu implements Listener {
         }
         return ChatColor.translateAlternateColorCodes('&', text);
     }
-
-    public static final String MENU_TITLE = color("&5Amethyst Tools");
 }

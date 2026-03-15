@@ -25,40 +25,7 @@ public class AmethystToolBlockBreak implements Listener {
         this.plugin = plugin;
     }
 
-    private static final Set<Material> BLACKLIST = EnumSet.of(
-            Material.CHEST,
-            Material.TRAPPED_CHEST,
-            Material.SHULKER_BOX,
-            Material.BLACK_SHULKER_BOX,
-            Material.BLUE_SHULKER_BOX,
-            Material.BROWN_SHULKER_BOX,
-            Material.CYAN_SHULKER_BOX,
-            Material.GRAY_SHULKER_BOX,
-            Material.GREEN_SHULKER_BOX,
-            Material.LIGHT_BLUE_SHULKER_BOX,
-            Material.LIGHT_GRAY_SHULKER_BOX,
-            Material.LIME_SHULKER_BOX,
-            Material.MAGENTA_SHULKER_BOX,
-            Material.ORANGE_SHULKER_BOX,
-            Material.PINK_SHULKER_BOX,
-            Material.PURPLE_SHULKER_BOX,
-            Material.RED_SHULKER_BOX,
-            Material.WHITE_SHULKER_BOX,
-            Material.YELLOW_SHULKER_BOX,
-            Material.BEDROCK,
-            Material.OBSIDIAN,
-            Material.CRYING_OBSIDIAN,
-            Material.COMMAND_BLOCK,
-            Material.CHAIN_COMMAND_BLOCK,
-            Material.REPEATING_COMMAND_BLOCK,
-            Material.COPPER_CHEST,
-            Material.EXPOSED_COPPER_CHEST,
-            Material.WEATHERED_COPPER_CHEST,
-            Material.OXIDIZED_COPPER_CHEST,
-            Material.WAXED_COPPER_CHEST,
-            Material.WAXED_EXPOSED_COPPER_CHEST,
-            Material.WAXED_WEATHERED_COPPER_CHEST,
-            Material.WAXED_OXIDIZED_COPPER_CHEST
+    private static final Set<Material> BLACKLIST = EnumSet.of(Material.CHEST, Material.TRAPPED_CHEST, Material.SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.LIME_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.BEDROCK, Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK, Material.REPEATING_COMMAND_BLOCK, Material.COPPER_CHEST, Material.EXPOSED_COPPER_CHEST, Material.WEATHERED_COPPER_CHEST, Material.OXIDIZED_COPPER_CHEST, Material.WAXED_COPPER_CHEST, Material.WAXED_EXPOSED_COPPER_CHEST, Material.WAXED_WEATHERED_COPPER_CHEST, Material.WAXED_OXIDIZED_COPPER_CHEST
     );
 
     @EventHandler

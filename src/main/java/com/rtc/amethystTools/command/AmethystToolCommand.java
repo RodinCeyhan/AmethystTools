@@ -52,76 +52,86 @@ public class AmethystToolCommand extends BukkitCommand {
 
         if (args.length == 0) {
             player.openInventory(new AmethystToolMainMenu(plugin).create(player));
-            player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1, 1);
+            player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1.0F, 1.0F);
             return true;
         }
 
-        if (args.length == 1) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.empyt-arg2", "&cPlease enter an argument.")));
+        String tierInput = args[0].toLowerCase();
+        if (args.length == 1 && TIER.contains(tierInput)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.empty-arg2", "&cPlease enter a tool type (pickaxe, axe, shovel).")));
             return true;
         }
 
-        if (!args[0].isBlank() && !TIER.contains(args[0])) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-arg1", "&cPlease enter a valid material.")));
+        if (!tierInput.isBlank() && !TIER.contains(tierInput)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-arg1", "&cPlease enter a valid material.")));
             return true;
         }
 
-        if (!args[1].isBlank() && !TYPE.contains(args[1])) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-arg2", "&cPlease enter a valid tool.")));
+        String typeInput = args[1].toLowerCase();
+        if (!typeInput.isBlank() && !TYPE.contains(typeInput)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-arg2", "&cPlease enter a valid tool.")));
             return true;
         }
-
 
         if (player.getInventory().firstEmpty() == -1) {
-            String invfullmsgtier = switch (args[0].toLowerCase()) {
-                case "wooden" -> "Wooden";
-                case "stone" -> "Stone";
-                case "iron" -> "Iron";
-                case "copper" -> "Copper";
-                case "diamond" -> "Diamond";
-                case "netherite" -> "Netherite";
-                case "golden" -> "Gold";
-                default -> "(Error Material)";
-            };
+            String invfullmsgtier = getTierName(tierInput);
+            String invfullmsgtool = getTypeName(typeInput);
 
-            String invfullmsgtool = switch (args[1].toLowerCase()) {
-                case "pickaxe" -> "Pickaxe";
-                case "axe" -> "Axe";
-                case "shovel" -> "Shovel";
-                default -> "(Error Tool)";
-            };
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.invfull", "&5{material} {tool} &ccould not be added to your inventory because it is full.")).replace("{material}", invfullmsgtier).replace("{tool}", invfullmsgtool));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.invfull", "&c{material} {tool} could not be added to your inventory because it is full.")).replace("{material}", invfullmsgtier).replace("{tool}", invfullmsgtool));
             player.sendActionBar(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.invfull-actionbar", "&cYour inventory is full!")));
             return true;
         }
 
-        Material mat = getMaterial(args[0], args[1]);
-        assert mat != null;
+        Material mat = getMaterial(tierInput, typeInput);
+        if (mat == null) return true;
+
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) return true;
+
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-
         pdc.set(AmethystTools.KEY_TOOL, PersistentDataType.BYTE, (byte) 1);
-        pdc.set(AmethystTools.KEY_TIER, PersistentDataType.STRING, args[0].toLowerCase());
-        pdc.set(AmethystTools.KEY_TYPE, PersistentDataType.STRING, args[1].toLowerCase());
+        pdc.set(AmethystTools.KEY_TIER, PersistentDataType.STRING, tierInput);
+        pdc.set(AmethystTools.KEY_TYPE, PersistentDataType.STRING, typeInput);
 
-        String toolNameArg = switch (args[1].toLowerCase()) {
+        String toolDisplayName = switch (typeInput) {
             case "pickaxe" -> plugin.getConfig().getString("item.item-pickaxe", "&5ᴘɪᴄᴋᴀхᴇ");
             case "axe" -> plugin.getConfig().getString("item.item-axe", "&5ᴀхᴇ");
             case "shovel" -> plugin.getConfig().getString("item.item-shovel", "&5ѕʜᴏᴠᴇʟ");
             default -> "&cERROR";
         };
 
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolNameArg));
-
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName));
         meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
-
         meta.setCustomModelData(2235897);
-        item.setItemMeta(meta);
 
+        item.setItemMeta(meta);
         player.getInventory().addItem(item);
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0f, 2.0f);
+
         return true;
+    }
+
+    private String getTierName(String tier) {
+        return switch (tier) {
+            case "wooden" -> "Wooden";
+            case "stone" -> "Stone";
+            case "iron" -> "Iron";
+            case "copper" -> "Copper";
+            case "diamond" -> "Diamond";
+            case "netherite" -> "Netherite";
+            case "golden" -> "Gold";
+            default -> "(Error Material)";
+        };
+    }
+
+    private String getTypeName(String type) {
+        return switch (type) {
+            case "pickaxe" -> "Pickaxe";
+            case "axe" -> "Axe";
+            case "shovel" -> "Shovel";
+            default -> "(Error Tool)";
+        };
     }
 
     @Override

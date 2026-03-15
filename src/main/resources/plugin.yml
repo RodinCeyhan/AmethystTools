@@ -1,0 +1,13 @@
+name: AmethystTools
+version: '1.1'
+main: com.rtc.amethystTools.AmethystTools
+api-version: '1.21'
+folia-supported: true
+author: 'RodinToprak'
+permissions:
+  amethysttools.give:
+    default: op
+    description: This permission you can use give command.
+  amethysttools.admin:
+    default: op
+    description: This permission you can use reload command.
