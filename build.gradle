@@ -17,12 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
 }
 
 jar {
     archiveBaseName.set("AmethystTools")
-    archiveVersion.set("${version}-1.21.11")
+    archiveVersion.set("${version}-1.21.8")
     archiveClassifier.set("")
 }
 
