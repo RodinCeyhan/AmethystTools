@@ -17,12 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:26.1.1.build.+")
 }
 
 jar {
     archiveBaseName.set("AmethystTools")
-    archiveVersion.set("${version}-1.21.11")
+    archiveVersion.set("${version}-26.1.x")
     archiveClassifier.set("")
 }
 
@@ -35,7 +35,7 @@ tasks {
     }
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 25
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
