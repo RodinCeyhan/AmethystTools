@@ -23,7 +23,7 @@ import java.util.List;
 public class AmethystToolCommand extends BukkitCommand {
 
     private static final List<String> TIER = Arrays.asList(
-            "wooden", "stone", "iron", "golden", "copper", "diamond", "netherite"
+            "wooden", "stone", "iron", "golden", "diamond", "netherite"
     );
     private static final List<String> TYPE = Arrays.asList(
             "pickaxe", "axe", "shovel"
@@ -42,7 +42,7 @@ public class AmethystToolCommand extends BukkitCommand {
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String [] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player player)) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.only-players", "&cOnly players can use this command.")));
@@ -62,13 +62,13 @@ public class AmethystToolCommand extends BukkitCommand {
         }
 
         if (!tierInput.isBlank() && !TIER.contains(tierInput)) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-arg1", "&cPlease enter a valid material.")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-material", "&cPlease enter a valid material.")));
             return true;
         }
 
         String typeInput = args[1].toLowerCase();
         if (!typeInput.isBlank() && !TYPE.contains(typeInput)) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-arg2", "&cPlease enter a valid tool.")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-tool", "&cPlease enter a valid tool.")));
             return true;
         }
 
@@ -116,7 +116,6 @@ public class AmethystToolCommand extends BukkitCommand {
             case "wooden" -> "Wooden";
             case "stone" -> "Stone";
             case "iron" -> "Iron";
-            case "copper" -> "Copper";
             case "diamond" -> "Diamond";
             case "netherite" -> "Netherite";
             case "golden" -> "Gold";
@@ -134,7 +133,7 @@ public class AmethystToolCommand extends BukkitCommand {
     }
 
     @Override
-    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String [] args) {
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String partial = args[0].toLowerCase();

@@ -2,6 +2,7 @@ package com.rtc.amethystTools;
 
 import com.rtc.amethystTools.command.AmethystToolCommand;
 import com.rtc.amethystTools.command.AmethystToolReloadCommand;
+import com.rtc.amethystTools.command.AmethystToolsGiveCommand;
 import com.rtc.amethystTools.event.AmethystToolBlockBreak;
 import com.rtc.amethystTools.listener.AmethystToolHoldSound;
 import com.rtc.amethystTools.listener.AnvilListener;
@@ -44,13 +45,10 @@ public final class AmethystTools extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AmethystToolBlockBreak(this), this);
 
         this.getServer().getCommandMap().register("amethysttools", new AmethystToolCommand(this));
+        this.getServer().getCommandMap().register("amethysttoolsgive", new AmethystToolsGiveCommand(this));
         this.getServer().getCommandMap().register("amethysttoolsreload", new AmethystToolReloadCommand(this));
 
         getServer().getPluginManager().registerEvents(new AnvilListener(), this);
         getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
-    }
-
-    @Override
-    public void onDisable() {
     }
 }
