@@ -5,6 +5,7 @@ AmethystTools is a powerful and customizable Paper plugin that adds special amet
 Inspired by custom tool systems like those used in popular SMP servers, this plugin enhances survival gameplay with smarter and faster block breaking mechanics.
 
 **Commands:**
+- `/amethysttoolsgive <player> <material> <type>` - Command provides a track to a specific player.
 - `/amethysttools <material> <type>`
 - **Materials:** Wooden, Stone, Iron, Copper, Golden, Diamond, Netherite
 - **Types:** Pickaxe, Shovel, Axe
