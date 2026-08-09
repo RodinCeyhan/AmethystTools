@@ -126,7 +126,6 @@ Optimized for:
 ## 🔑 Permissions
 
 ```txt
-amethysttools.use
 amethysttools.reload
 amethysttools.give
 ````

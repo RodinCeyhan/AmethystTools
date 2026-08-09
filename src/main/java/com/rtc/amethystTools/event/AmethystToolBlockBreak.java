@@ -1,11 +1,13 @@
 package com.rtc.amethystTools.event;
 
 import com.rtc.amethystTools.AmethystTools;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +17,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused", "RedundantIfStatement"})
 public class AmethystToolBlockBreak implements Listener {
@@ -24,6 +27,8 @@ public class AmethystToolBlockBreak implements Listener {
     public AmethystToolBlockBreak(AmethystTools plugin) {
         this.plugin = plugin;
     }
+
+    private final Set<UUID> processingPlayers = new HashSet<>();
 
     private static final Set<Material> BLACKLIST = new HashSet<>();
 
@@ -79,90 +84,166 @@ public class AmethystToolBlockBreak implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+
         Player player = event.getPlayer();
+
+        if (processingPlayers.contains(player.getUniqueId())) {
+            return;
+        }
+
         ItemStack tool = player.getInventory().getItemInMainHand();
-        if (!isAmethystTool(tool)) return;
+
+        if (!isAmethystTool(tool)) {
+            return;
+        }
+
         Block center = event.getBlock();
-        if (BLACKLIST.contains(center.getType())) return;
-        float pitch = player.getLocation().getPitch();
-        if (pitch > 45 || pitch < -45) {
-            breakVerticalArea(center, player);
-        } else {
-            breakHorizontalArea(center, player);
+
+        if (BLACKLIST.contains(center.getType())) {
+            return;
+        }
+
+        UUID uuid = player.getUniqueId();
+        processingPlayers.add(uuid);
+
+        try {
+            float pitch = player.getLocation().getPitch();
+
+            if (pitch > 45 || pitch < -45) {
+                breakVerticalArea(center, player);
+            } else {
+                breakHorizontalArea(center, player);
+            }
+
+        } finally {
+            processingPlayers.remove(uuid);
         }
     }
 
     private void breakHorizontalArea(Block center, Player player) {
+
         BlockFace face = player.getFacing();
+
         for (int y = -1; y <= 1; y++) {
+
             for (int s = -1; s <= 1; s++) {
+
                 Block target;
+
                 if (face == BlockFace.NORTH || face == BlockFace.SOUTH) {
                     target = center.getRelative(s, y, 0);
                 } else {
                     target = center.getRelative(0, y, s);
                 }
-                if (target.equals(center)) continue;
+
+                if (target.equals(center)) {
+                    continue;
+                }
+
                 breakBlockSafe(target, player);
             }
         }
     }
 
     private void breakVerticalArea(Block center, Player player) {
+
         BlockFace face = player.getFacing();
         Vector dir = player.getLocation().getDirection();
+
         if (Math.abs(dir.getY()) > 0.7) {
+
             int depth = dir.getY() < 0 ? -1 : 1;
+
             for (int y = 0; y < 2; y++) {
+
                 for (int side = -1; side <= 1; side++) {
+
                     Block target;
+
                     if (face == BlockFace.NORTH || face == BlockFace.SOUTH) {
                         target = center.getRelative(side, depth * y, 0);
                     } else {
                         target = center.getRelative(0, depth * y, side);
                     }
-                    if (target.equals(center)) continue;
+
+                    if (target.equals(center)) {
+                        continue;
+                    }
+
                     breakBlockSafe(target, player);
                 }
             }
+
             return;
         }
 
         for (int s = -1; s <= 1; s++) {
+
             for (int d = 1; d <= 2; d++) {
+
                 Block target;
-                if (face == BlockFace.NORTH)
+
+                if (face == BlockFace.NORTH) {
                     target = center.getRelative(s, 0, -d);
-                else if (face == BlockFace.SOUTH)
+                } else if (face == BlockFace.SOUTH) {
                     target = center.getRelative(s, 0, d);
-                else if (face == BlockFace.EAST)
+                } else if (face == BlockFace.EAST) {
                     target = center.getRelative(d, 0, s);
-                else
+                } else {
                     target = center.getRelative(-d, 0, s);
+                }
+
                 breakBlockSafe(target, player);
             }
         }
     }
 
-
     private void breakBlockSafe(Block block, Player player) {
-        if (block.getType().isAir() || BLACKLIST.contains(block.getType())) return;
+
+        if (block.getType().isAir()) {
+            return;
+        }
+
+        if (BLACKLIST.contains(block.getType())) {
+            return;
+        }
+
         ItemStack tool = player.getInventory().getItemInMainHand();
-        if (!block.isPreferredTool(tool)) return;
+
+        if (!block.isPreferredTool(tool)) {
+            return;
+        }
+
+        BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
+
+        Bukkit.getPluginManager().callEvent(breakEvent);
+
+        if (breakEvent.isCancelled()) {
+            return;
+        }
+
         block.breakNaturally(tool);
     }
 
     private boolean isAmethystTool(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR || !item.hasItemMeta()) return false;
+
+        if (item == null || item.getType() == Material.AIR || !item.hasItemMeta()) {
+            return false;
+        }
+
         ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(AmethystTools.KEY_TOOL, PersistentDataType.BYTE)) {
+
+        if (meta.getPersistentDataContainer()
+                .has(AmethystTools.KEY_TOOL, PersistentDataType.BYTE)) {
             return true;
         }
+
         if (meta.hasCustomModelData() && meta.getCustomModelData() == 2235897) {
             return true;
         }
+
         return false;
     }
 }
