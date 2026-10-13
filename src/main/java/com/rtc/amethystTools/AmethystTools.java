@@ -53,13 +53,16 @@ public final class AmethystTools extends JavaPlugin implements Listener {
 
         FileConfiguration config = getConfig();
 
-        if (!config.isSet("block-breaking-mode")) {
-            try {
-                File configFile = new File(getDataFolder(), "config.yml");
-                List<String> lines = Files.exists(configFile.toPath())
-                        ? Files.readAllLines(configFile.toPath(), StandardCharsets.UTF_8)
-                        : new ArrayList<>();
+        File configFile = new File(getDataFolder(), "config.yml");
 
+        try {
+            List<String> lines = Files.exists(configFile.toPath())
+                    ? Files.readAllLines(configFile.toPath(), StandardCharsets.UTF_8)
+                    : new ArrayList<>();
+
+            boolean changed = false;
+
+            if (!config.isSet("block-breaking-mode")) {
                 int insertIndex = -1;
 
                 for (int i = 0; i < lines.size(); i++) {
@@ -82,12 +85,87 @@ public final class AmethystTools extends JavaPlugin implements Listener {
                 );
 
                 lines.addAll(insertIndex, addition);
-                Files.write(configFile.toPath(), lines, StandardCharsets.UTF_8);
-
-                reloadConfig();
-            } catch (IOException exception) {
-                getLogger().warning("Could not add block-breaking-mode to config.yml!");
+                changed = true;
             }
+
+            if (!config.isSet("blacklist-blocks")) {
+                List<String> blacklist = Arrays.asList(
+                        "",
+                        "blacklist-blocks:",
+                        "  - DIAMOND_ORE",
+                        "  - DEEPSLATE_DIAMOND_ORE",
+                        "  - EMERALD_ORE",
+                        "  - DEEPSLATE_EMERALD_ORE",
+                        "  - IRON_ORE",
+                        "  - DEEPSLATE_IRON_ORE",
+                        "  - GOLD_ORE",
+                        "  - DEEPSLATE_GOLD_ORE",
+                        "  - NETHER_GOLD_ORE",
+                        "  - COPPER_ORE",
+                        "  - DEEPSLATE_COPPER_ORE",
+                        "  - COAL_ORE",
+                        "  - DEEPSLATE_COAL_ORE",
+                        "  - LAPIS_ORE",
+                        "  - DEEPSLATE_LAPIS_ORE",
+                        "  - REDSTONE_ORE",
+                        "  - DEEPSLATE_REDSTONE_ORE",
+                        "  - NETHER_QUARTZ_ORE",
+                        "  - ANCIENT_DEBRIS",
+                        "  - AMETHYST_CLUSTER",
+                        "  - LARGE_AMETHYST_BUD",
+                        "  - MEDIUM_AMETHYST_BUD",
+                        "  - SMALL_AMETHYST_BUD",
+                        "  - GILDED_BLACKSTONE",
+                        "  - RAW_IRON_BLOCK",
+                        "  - RAW_GOLD_BLOCK",
+                        "  - RAW_COPPER_BLOCK",
+                        "",
+                        "  - CHEST",
+                        "  - TRAPPED_CHEST",
+                        "  - SHULKER_BOX",
+                        "  - BLACK_SHULKER_BOX",
+                        "  - BLUE_SHULKER_BOX",
+                        "  - BROWN_SHULKER_BOX",
+                        "  - CYAN_SHULKER_BOX",
+                        "  - GRAY_SHULKER_BOX",
+                        "  - GREEN_SHULKER_BOX",
+                        "  - LIGHT_BLUE_SHULKER_BOX",
+                        "  - LIGHT_GRAY_SHULKER_BOX",
+                        "  - LIME_SHULKER_BOX",
+                        "  - MAGENTA_SHULKER_BOX",
+                        "  - ORANGE_SHULKER_BOX",
+                        "  - PINK_SHULKER_BOX",
+                        "  - PURPLE_SHULKER_BOX",
+                        "  - RED_SHULKER_BOX",
+                        "  - WHITE_SHULKER_BOX",
+                        "  - YELLOW_SHULKER_BOX",
+                        "  - BEDROCK",
+                        "  - OBSIDIAN",
+                        "  - CRYING_OBSIDIAN",
+                        "  - COMMAND_BLOCK",
+                        "  - CHAIN_COMMAND_BLOCK",
+                        "  - REPEATING_COMMAND_BLOCK",
+                        "  - COPPER_CHEST",
+                        "  - EXPOSED_COPPER_CHEST",
+                        "  - WEATHERED_COPPER_CHEST",
+                        "  - OXIDIZED_COPPER_CHEST",
+                        "  - VAULT",
+                        "  - WAXED_COPPER_CHEST",
+                        "  - WAXED_EXPOSED_COPPER_CHEST",
+                        "  - WAXED_WEATHERED_COPPER_CHEST",
+                        "  - WAXED_OXIDIZED_COPPER_CHEST"
+                );
+
+                lines.addAll(blacklist);
+                changed = true;
+            }
+
+            if (changed) {
+                Files.write(configFile.toPath(), lines, StandardCharsets.UTF_8);
+                reloadConfig();
+            }
+        } catch (IOException exception) {
+            getLogger().warning("Could not update config.yml: " + exception.getMessage());
         }
 
 

@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted"})
+@SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted", "UnnecessaryReturnStatement"})
 public class AmethystToolBlockBreak implements Listener {
 
     private final AmethystTools plugin;
@@ -34,39 +34,6 @@ public class AmethystToolBlockBreak implements Listener {
     private static final int MAX_TREE_BLOCKS = 64;
     private static final int MAX_TREE_SCAN = 4096;
 
-    private static final Set<Material> BLACKLIST = new HashSet<>();
-
-    static {
-        String[] materials = {
-                "CHEST", "TRAPPED_CHEST",
-                "SHULKER_BOX", "BLACK_SHULKER_BOX",
-                "BLUE_SHULKER_BOX", "BROWN_SHULKER_BOX",
-                "CYAN_SHULKER_BOX", "GRAY_SHULKER_BOX",
-                "GREEN_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX",
-                "LIGHT_GRAY_SHULKER_BOX", "LIME_SHULKER_BOX",
-                "MAGENTA_SHULKER_BOX", "ORANGE_SHULKER_BOX",
-                "PINK_SHULKER_BOX", "PURPLE_SHULKER_BOX",
-                "RED_SHULKER_BOX", "WHITE_SHULKER_BOX",
-                "YELLOW_SHULKER_BOX",
-                "BEDROCK", "OBSIDIAN", "CRYING_OBSIDIAN",
-                "COMMAND_BLOCK", "CHAIN_COMMAND_BLOCK",
-                "REPEATING_COMMAND_BLOCK",
-                "COPPER_CHEST", "EXPOSED_COPPER_CHEST",
-                "WEATHERED_COPPER_CHEST", "OXIDIZED_COPPER_CHEST",
-                "VAULT", "WAXED_COPPER_CHEST",
-                "WAXED_EXPOSED_COPPER_CHEST",
-                "WAXED_WEATHERED_COPPER_CHEST",
-                "WAXED_OXIDIZED_COPPER_CHEST"
-        };
-
-        for (String name : materials) {
-            Material material = Material.matchMaterial(name);
-
-            if (material != null) {
-                BLACKLIST.add(material);
-            }
-        }
-    }
 
     private enum ToolKind {
         PICKAXE, SHOVEL, AXE, OTHER
@@ -80,6 +47,18 @@ public class AmethystToolBlockBreak implements Listener {
         return "NEW".equalsIgnoreCase(
                 plugin.getConfig().getString("block-breaking-mode", "NEW")
         );
+    }
+
+    private boolean isBlacklisted(Material material) {
+        for (String name : plugin.getConfig().getStringList("blacklist-blocks")) {
+            Material blacklisted = Material.matchMaterial(name.trim());
+
+            if (blacklisted == material) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -99,7 +78,7 @@ public class AmethystToolBlockBreak implements Listener {
 
         Block center = event.getBlock();
 
-        if (BLACKLIST.contains(center.getType())) {
+        if (isBlacklisted(center.getType())) {
             return;
         }
 
@@ -165,7 +144,7 @@ public class AmethystToolBlockBreak implements Listener {
 
         Block block = event.getBlock();
 
-        if (BLACKLIST.contains(block.getType())) {
+        if (isBlacklisted(block.getType())) {
             return;
         }
     }
@@ -236,7 +215,7 @@ public class AmethystToolBlockBreak implements Listener {
     }
 
     private void breakBlockSafeOld(Block block, Player player) {
-        if (block.getType().isAir() || BLACKLIST.contains(block.getType())) {
+        if (block.getType().isAir() || isBlacklisted(block.getType())) {
             return;
         }
 
@@ -316,7 +295,7 @@ public class AmethystToolBlockBreak implements Listener {
     }
 
     private void breakBlockSafe(Block block, Player player) {
-        if (block.getType().isAir() || BLACKLIST.contains(block.getType()) || isPlantOrGrass(block.getType())) {
+        if (block.getType().isAir() || isBlacklisted(block.getType()) || isPlantOrGrass(block.getType())) {
             return;
         }
 
@@ -395,7 +374,7 @@ public class AmethystToolBlockBreak implements Listener {
     }
 
     private boolean fireBreakEventAndBreak(Block block, Player player, ItemStack tool) {
-        if (block.getType().isAir() || BLACKLIST.contains(block.getType())) {
+        if (block.getType().isAir() || isBlacklisted(block.getType())) {
             return false;
         }
 
@@ -413,7 +392,7 @@ public class AmethystToolBlockBreak implements Listener {
         var location = block.getLocation().add(0.5, 0.5, 0.5);
 
         block.getWorld().playSound(location, Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1.0f, 1.0f);
-        block.getWorld().spawnParticle(Particle.PORTAL, location, 120, 0.35, 0.35, 0.35, 0.0);
+        block.getWorld().spawnParticle(Particle.PORTAL, location, 25, 0.35, 0.35, 0.35, 0.0);
     }
 
     private boolean isAmethystTool(ItemStack item) {
