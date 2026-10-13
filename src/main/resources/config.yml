@@ -1,27 +1,34 @@
+# Supported Mini Message, RGB and legacy color codes
+
 messages:
-  only-players: "&cOnly players can use this command."
-  wrong-material: "&cPlease enter a valid material."
-  wrong-tool: "&cPlease enter a valid tool."
-  empyt-arg2: "&cPlease enter a tool type (pickaxe, axe, shovel)."
-  invfull: "&5{material} {tool} &ccould not be added to your inventory because it is full."
-  invfull-actionbar: "&cYour inventory is full!"
+  only-players: "<red>Only players can use this command."
+  wrong-material: "<red>Please enter a valid material."
+  wrong-tool: "<red>Please enter a valid tool."
+  empyt-arg2: "<red>Please enter a tool type (pickaxe, axe, shovel)."
+  invfull: "<dark_purple>{material} {tool} <red>could not be added to your inventory because it is full."
+  invfull-actionbar: "<red>Your inventory is full!"
   reloadplugin: "&aPlugin reload is succesfuly complete."
   reloadplugin-actionbar: "&aReloaded Plugin"
-  nopermission: "&cYou don't have permission!"
-  nopermission-actionbar: "&cYou don't have permission!"
-  use-give: "&cUse: &7/amethysttoolsgive <player> <tier> <type>"
-  player-notfound: "&c{player} not found."
-  player-notfound-actionbar: "&cPlayer not found"
-  enter-tier: "&cPlease enter a tool tier."
+  nopermission: "<red>You don't have permission!"
+  nopermission-actionbar: "<red>You don't have permission!"
+  use-give: "<red>Use: &7/amethysttoolsgive <player> <tier> <type>"
+  player-notfound: "<red>{player} not found."
+  player-notfound-actionbar: "<red>Player not found"
+  enter-tier: "<red>Please enter a tool tier."
+
+# AmethystTools block-breaking mode
+# OLD: Original 3x3 behavior from the GitHub version
+# NEW: 3x3 pickaxe/shovel, tree-capitator axe, effects and plant exclusions
+block-breaking-mode: NEW
 
 item:
-  item-name: "&5ᴀᴍᴇᴛʜʏѕᴛ"
-  item-pickaxe: "&5ᴘɪᴄᴋᴀхᴇ"
-  item-axe: "&5ᴀхᴇ"
-  item-shovel: "&5ѕʜᴏᴠᴇʟ"
+  item-name: "<dark_purple>ᴀᴍᴇᴛʜʏѕᴛ"
+  item-pickaxe: "<dark_purple>ᴘɪᴄᴋᴀхᴇ"
+  item-axe: "<dark_purple>ᴀхᴇ"
+  item-shovel: "<dark_purple>ѕʜᴏᴠᴇʟ"
 
 menus:
-  menu-main: "&5Amethyst Tools"
+  menu-main: "<dark_purple>Amethyst Tools"
   menu-wooden: "&#A0522DWooden Tools"
   menu-stone: "&#7D7D7DStone Tools"
   menu-iron: "&#DADADAIron Tools"
@@ -29,4 +36,4 @@ menus:
   menu-golden: "&#FFD700Golden Tools"
   menu-diamond: "&#4EE1D8Diamond Tools"
   menu-netherite: "&#2B2B2FNetherite Tools"
-  item-previous: "&e<- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ"
+  item-previous: "<yellow><- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ"

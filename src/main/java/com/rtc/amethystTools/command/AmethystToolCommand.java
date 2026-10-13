@@ -6,9 +6,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.rtc.amethystTools.AmethystTools;
 import com.rtc.amethystTools.menu.AmethystToolMainMenu;
+import com.rtc.amethystTools.utils.MessageUtils;
+import com.rtc.amethystTools.utils.ToolUtils;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -16,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import com.rtc.amethystTools.utils.ToolUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.List;
 public class AmethystToolCommand {
 
     private static final List<String> TIER = new ArrayList<>();
+
     static {
         TIER.add("wooden");
         TIER.add("stone");
@@ -69,9 +71,9 @@ public class AmethystToolCommand {
 
                             String tierInput = StringArgumentType.getString(context, "tier").toLowerCase();
                             if (TIER.contains(tierInput)) {
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.empty-arg2", "&cPlease enter a tool type (pickaxe, axe, shovel).")));
+                                player.sendMessage(MessageUtils.parse(plugin.getConfig().getString("messages.empty-arg2", "&cPlease enter a tool type (pickaxe, axe, shovel).")));
                             } else {
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-material", "&cPlease enter a valid material.")));
+                                player.sendMessage(MessageUtils.parse(plugin.getConfig().getString("messages.wrong-material", "&cPlease enter a valid material.")));
                             }
                             return Command.SINGLE_SUCCESS;
                         })
@@ -107,12 +109,12 @@ public class AmethystToolCommand {
         String typeInput = StringArgumentType.getString(context, "type").toLowerCase();
 
         if (!TIER.contains(tierInput)) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-material", "&cPlease enter a valid material.")));
+            player.sendMessage(MessageUtils.parse(plugin.getConfig().getString("messages.wrong-material", "&cPlease enter a valid material.")));
             return Command.SINGLE_SUCCESS;
         }
 
         if (!TYPE.contains(typeInput)) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.wrong-tool", "&cPlease enter a valid tool.")));
+            player.sendMessage(MessageUtils.parse(plugin.getConfig().getString("messages.wrong-tool", "&cPlease enter a valid tool.")));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -120,8 +122,8 @@ public class AmethystToolCommand {
             String invfullmsgtier = ToolUtils.getTierName(tierInput);
             String invfullmsgtool = ToolUtils.getTypeName(typeInput);
 
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.invfull", "&c{material} {tool} could not be added to your inventory because it is full.")).replace("{material}", invfullmsgtier).replace("{tool}", invfullmsgtool));
-            player.sendActionBar(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.invfull-actionbar", "&cYour inventory is full!")));
+            player.sendMessage(MessageUtils.parse(plugin.getConfig().getString("messages.invfull", "&c{material} {tool} could not be added to your inventory because it is full.").replace("{material}", invfullmsgtier).replace("{tool}", invfullmsgtool)));
+            player.sendActionBar(MessageUtils.parse(plugin.getConfig().getString("messages.invfull-actionbar", "&cYour inventory is full!")));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -144,9 +146,10 @@ public class AmethystToolCommand {
             default -> "&cERROR";
         };
 
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName));
+        meta.displayName(MessageUtils.parse(plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName).decoration(TextDecoration.ITALIC, false));
         meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
         meta.setCustomModelData(2235897);
+
 
         item.setItemMeta(meta);
         player.getInventory().addItem(item);
@@ -157,7 +160,7 @@ public class AmethystToolCommand {
 
     private Player getPlayerOrSendError(CommandContext<CommandSourceStack> context) {
         if (!(context.getSource().getSender() instanceof Player player)) {
-            context.getSource().getSender().sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.only-players", "&cOnly players can use this command.")));
+            context.getSource().getSender().sendMessage(MessageUtils.parse(plugin.getConfig().getString("messages.only-players", "&cOnly players can use this command.")));
             return null;
         }
         return player;

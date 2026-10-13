@@ -16,11 +16,18 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings({"unused", "deprecation", "UnstableApiUsage", "SpellCheckingInspection"})
@@ -42,6 +49,48 @@ public final class AmethystTools extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
+
+
+        FileConfiguration config = getConfig();
+
+        if (!config.isSet("block-breaking-mode")) {
+            try {
+                File configFile = new File(getDataFolder(), "config.yml");
+                List<String> lines = Files.exists(configFile.toPath())
+                        ? Files.readAllLines(configFile.toPath(), StandardCharsets.UTF_8)
+                        : new ArrayList<>();
+
+                int insertIndex = -1;
+
+                for (int i = 0; i < lines.size(); i++) {
+                    if (lines.get(i).contains("Supported Mini Message, RGB and legacy color codes")) {
+                        insertIndex = i + 1;
+                        break;
+                    }
+                }
+
+                if (insertIndex == -1) {
+                    insertIndex = lines.size();
+                }
+
+                List<String> addition = Arrays.asList(
+                        "",
+                        "# AmethystTools block-breaking mode",
+                        "# OLD: Original 3x3 behavior from the GitHub version",
+                        "# NEW: 3x3 pickaxe/shovel, tree-capitator axe, effects and plant exclusions",
+                        "block-breaking-mode: NEW"
+                );
+
+                lines.addAll(insertIndex, addition);
+                Files.write(configFile.toPath(), lines, StandardCharsets.UTF_8);
+
+                reloadConfig();
+            } catch (IOException exception) {
+                getLogger().warning("Could not add block-breaking-mode to config.yml!");
+            }
+        }
+
+
         KEY_TOOL = new NamespacedKey(this, "amethyst_tool");
         KEY_TIER = new NamespacedKey(this, "amethyst_tier");
         KEY_TYPE = new NamespacedKey(this, "amethyst_type");

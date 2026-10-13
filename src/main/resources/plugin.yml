@@ -1,9 +1,10 @@
 name: AmethystTools
-version: '1.5'
+version: '1.6'
 main: com.rtc.amethystTools.AmethystTools
 api-version: '1.21'
 folia-supported: true
 author: 'RodinToprak'
+prefix: "AmethystTools"
 permissions:
   amethysttools.give:
     default: op
