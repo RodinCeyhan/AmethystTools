@@ -310,6 +310,7 @@ public class AmethystToolBlockBreak implements Listener {
         }
     }
 
+
     private void breakTree(Block start, Player player) {
         if (!isLog(start.getType())) {
             return;
@@ -329,9 +330,12 @@ public class AmethystToolBlockBreak implements Listener {
             Block current = queue.removeFirst();
             scanned++;
 
-            if (isLog(current.getType())) {
+            boolean currentIsLog = isLog(current.getType());
+            boolean currentIsLeaves = Tag.LEAVES.isTagged(current.getType());
+
+            if (currentIsLog) {
                 logs.add(current);
-            } else if (!Tag.LEAVES.isTagged(current.getType())) {
+            } else if (!currentIsLeaves) {
                 continue;
             }
 
@@ -343,14 +347,22 @@ public class AmethystToolBlockBreak implements Listener {
                         }
 
                         Block next = current.getRelative(dx, dy, dz);
+                        boolean nextIsLog = isLog(next.getType());
+                        boolean nextIsLeaves = Tag.LEAVES.isTagged(next.getType());
+
+                        if (currentIsLeaves && !nextIsLog) {
+                            continue;
+                        }
+
+                        if (!nextIsLog && !nextIsLeaves) {
+                            continue;
+                        }
 
                         if (!visited.add(blockKey(next))) {
                             continue;
                         }
 
-                        if (isLog(next.getType()) || Tag.LEAVES.isTagged(next.getType())) {
-                            queue.addLast(next);
-                        }
+                        queue.addLast(next);
                     }
                 }
             }
@@ -373,6 +385,7 @@ public class AmethystToolBlockBreak implements Listener {
         }
     }
 
+
     private boolean fireBreakEventAndBreak(Block block, Player player, ItemStack tool) {
         if (block.getType().isAir() || isBlacklisted(block.getType())) {
             return false;
@@ -392,7 +405,7 @@ public class AmethystToolBlockBreak implements Listener {
         var location = block.getLocation().add(0.5, 0.5, 0.5);
 
         block.getWorld().playSound(location, Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1.0f, 1.0f);
-        block.getWorld().spawnParticle(Particle.PORTAL, location, 25, 0.35, 0.35, 0.35, 0.0);
+        block.getWorld().spawnParticle(Particle.PORTAL, location, 20, 0.35, 0.35, 0.35, 0.0);
     }
 
     private boolean isAmethystTool(ItemStack item) {

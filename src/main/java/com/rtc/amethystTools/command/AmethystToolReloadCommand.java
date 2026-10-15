@@ -8,7 +8,6 @@ import com.rtc.amethystTools.AmethystTools;
 import com.rtc.amethystTools.utils.MessageUtils;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -96,7 +95,7 @@ public class AmethystToolReloadCommand {
 
                 String itemName = plugin.getConfig().getString("item.item-name", "<dark_purple>ᴀᴍᴇᴛʜʏѕᴛ");
 
-                meta.displayName(MessageUtils.parse(itemName + " " + toolDisplayName).decoration(TextDecoration.ITALIC, false));
+                meta.displayName(MessageUtils.parse(itemName + " " + toolDisplayName));
 
                 item.setItemMeta(meta);
                 updated++;

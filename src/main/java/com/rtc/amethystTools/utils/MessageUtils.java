@@ -2,6 +2,7 @@
 package com.rtc.amethystTools.utils;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -12,18 +13,11 @@ import java.util.regex.Pattern;
 
 public final class MessageUtils {
 
-    private static final Pattern RGB_PATTERN =
-            Pattern.compile("&#([A-Fa-f0-9]{6})");
+    private static final Pattern RGB_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
 
-    private static final Pattern HEAD_TEXTURE_PATTERN =
-            Pattern.compile("[A-Fa-f0-9]{64}");
+    private static final Pattern HEAD_TEXTURE_PATTERN = Pattern.compile("[A-Fa-f0-9]{64}");
 
-    private static final LegacyComponentSerializer LEGACY_SERIALIZER =
-            LegacyComponentSerializer.builder()
-                    .character('&')
-                    .hexColors()
-                    .useUnusualXRepeatedCharacterHexFormat()
-                    .build();
+    private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder().character('&').hexColors().useUnusualXRepeatedCharacterHexFormat().build();
 
     private static final MiniMessage MINI_MESSAGE =
             MiniMessage.builder()
@@ -31,25 +25,12 @@ public final class MessageUtils {
                             TagResolver.resolver(
                                     "head_texture",
                                     (arguments, context) -> {
-                                        String texture = arguments
-                                                .popOr("Texture hash is required")
-                                                .value();
+                                        String texture = arguments.popOr("Texture hash is required").value();
 
-                                        if (!HEAD_TEXTURE_PATTERN
-                                                .matcher(texture)
-                                                .matches()) {
-                                            throw new IllegalArgumentException(
-                                                    "Invalid head texture hash: "
-                                                            + texture
-                                            );
+                                        if (!HEAD_TEXTURE_PATTERN.matcher(texture).matches()) {
+                                            throw new IllegalArgumentException("Invalid head texture hash: " + texture);
                                         }
 
-                                        // Paper MiniMessage does not provide
-                                        // a built-in tag that renders a head
-                                        // image from a texture hash.
-                                        // Return an empty component rather
-                                        // than recursively deserializing
-                                        // an unsupported <head:HASH> tag.
                                         return Tag.inserting(Component.empty());
                                     }
                             )
@@ -61,28 +42,29 @@ public final class MessageUtils {
 
     public static Component parse(String message) {
         if (message == null || message.isEmpty()) {
-            return Component.empty();
+            return Component.empty().decoration(TextDecoration.ITALIC, false);
         }
 
         Matcher matcher = RGB_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
 
         while (matcher.find()) {
-            matcher.appendReplacement(
-                    buffer,
-                    "<#" + matcher.group(1) + ">"
-            );
+            matcher.appendReplacement(buffer, "<#" + matcher.group(1) + ">");
         }
 
         matcher.appendTail(buffer);
 
         String prepared = convertLegacyCodes(buffer.toString());
 
+        Component component;
+
         if (prepared.contains("<")) {
-            return MINI_MESSAGE.deserialize(prepared);
+            component = MINI_MESSAGE.deserialize(prepared);
+        } else {
+            component = LEGACY_SERIALIZER.deserialize(prepared);
         }
 
-        return LEGACY_SERIALIZER.deserialize(prepared);
+        return component.decoration(TextDecoration.ITALIC, false);
     }
 
     private static String convertLegacyCodes(String message) {

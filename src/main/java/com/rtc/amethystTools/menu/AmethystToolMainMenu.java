@@ -1,9 +1,10 @@
 package com.rtc.amethystTools.menu;
 
 import com.rtc.amethystTools.AmethystTools;
+import com.rtc.amethystTools.utils.MessageUtils;
 import com.rtc.amethystTools.utils.ToolUtils;
+import com.rtc.amethystTools.utils.VersionUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,12 +14,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import com.rtc.amethystTools.utils.VersionUtil;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-@SuppressWarnings({"deprecation", "unused", "ClassCanBeRecord", "FieldCanBeLocal", "SpellCheckingInspection"})
+@SuppressWarnings({"unused", "ClassCanBeRecord", "FieldCanBeLocal", "SpellCheckingInspection"})
 public class AmethystToolMainMenu implements Listener {
 
     private final AmethystTools plugin;
@@ -37,8 +34,8 @@ public class AmethystToolMainMenu implements Listener {
 
     public Inventory create(Player player) {
         int size = 27;
-        String MENU_TITLE = plugin.getConfig().getString("menus.menu-main", "&5Amethyst Tools");
-        Inventory inv = Bukkit.createInventory(new MainMenuHolder(), size, color(MENU_TITLE));
+        String MENU_TITLE = plugin.getConfig().getString("menus.menu-main", "<dark_purple>Amethyst Tools");
+        Inventory inv = Bukkit.createInventory(new MainMenuHolder(), size, MessageUtils.parse(MENU_TITLE));
 
         boolean hasCopper = VersionUtil.isAtLeast("1.21.9");
 
@@ -67,8 +64,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-wooden", "&#A0522DWooden Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-wooden", "<#A0522D>Wooden Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -82,8 +79,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-stone", "&#7D7D7DStone Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-stone", "<#7D7D7D>Stone Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -97,8 +94,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-iron", "&#DADADAIron Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-iron", "<#DADADA>Iron Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -111,8 +108,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-copper", "&#C87533Copper Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-copper", "<#C87533>Copper Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -126,8 +123,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-golden", "&#FFD700Golden Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-golden", "<#FFD700>Golden Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -141,8 +138,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-diamond", "&#4EE1D8Diamond Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-diamond", "<#4EE1D8>Diamond Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -155,8 +152,8 @@ public class AmethystToolMainMenu implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        String itemname = plugin.getConfig().getString("menus.menu-netherite", "&#2B2B2FNetherite Tools");
-        meta.setDisplayName(color(itemname));
+        String itemname = plugin.getConfig().getString("menus.menu-netherite", "<#2B2B2F>Netherite Tools");
+        meta.displayName(MessageUtils.parse(itemname));
 
         item.setItemMeta(meta);
         return item;
@@ -199,18 +196,6 @@ public class AmethystToolMainMenu implements Listener {
         }
     }
 
-
-    private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
-
-    public static String color(String text) {
-        Matcher matcher = HEX_PATTERN.matcher(text);
-        while (matcher.find()) {
-            String hex = matcher.group(1);
-            text = text.replace("&#" + hex,
-                    net.md_5.bungee.api.ChatColor.of("#" + hex).toString());
-        }
-        return ChatColor.translateAlternateColorCodes('&', text);
-    }
 
     private void open(MenuType type, Player player) {
 

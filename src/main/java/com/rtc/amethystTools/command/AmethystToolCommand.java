@@ -146,7 +146,7 @@ public class AmethystToolCommand {
             default -> "&cERROR";
         };
 
-        meta.displayName(MessageUtils.parse(plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName).decoration(TextDecoration.ITALIC, false));
+        meta.displayName(MessageUtils.parse(plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName));
         meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
         meta.setCustomModelData(2235897);
 

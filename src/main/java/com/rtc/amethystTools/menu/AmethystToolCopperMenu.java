@@ -1,10 +1,10 @@
 package com.rtc.amethystTools.menu;
 
 import com.rtc.amethystTools.AmethystTools;
+import com.rtc.amethystTools.utils.MessageUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,10 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-@SuppressWarnings({"deprecation", "unused", "ClassCanBeRecord", "FieldCanBeLocal", "DataFlowIssue", "SpellCheckingInspection"})
+@SuppressWarnings({"unused", "ClassCanBeRecord", "FieldCanBeLocal", "DataFlowIssue", "SpellCheckingInspection"})
 public class AmethystToolCopperMenu implements Listener {
 
     private final AmethystTools plugin;
@@ -38,8 +36,8 @@ public class AmethystToolCopperMenu implements Listener {
 
     public Inventory create(Player player) {
         int size = 27;
-        String MENU_TITLE = plugin.getConfig().getString("menus.menu-copper", "&#C87533Copper Tools");
-        Inventory inv = Bukkit.createInventory(new CopperMenuHolder(), size, color(MENU_TITLE));
+        String MENU_TITLE = plugin.getConfig().getString("menus.menu-copper", "<#C87533>Copper Tools");
+        Inventory inv = Bukkit.createInventory(new CopperMenuHolder(), size, MessageUtils.parse(MENU_TITLE));
 
         inv.setItem(12, buildPickaxe(player));
         inv.setItem(13, buildShovel(player));
@@ -55,15 +53,16 @@ public class AmethystToolCopperMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        String materialname = plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ");
-        String materialpickaxe = plugin.getConfig().getString("item.item-pickaxe", "&5ᴘɪᴄᴋᴀхᴇ");
+        String materialname = plugin.getConfig().getString("item.item-name", "<dark_purple>ᴀᴍᴇᴛʜʏѕᴛ");
+        String materialpickaxe = plugin.getConfig().getString("item.item-pickaxe", "<dark_purple>ᴘɪᴄᴋᴀхᴇ");
 
-        String name = color(materialname + " " + materialpickaxe);
-        meta.setDisplayName(name);
-        meta.setLore(List.of("§7Breaks 9 Blocks at Once",
-                "",
-                color("&#FFFF00Click to get")));
-        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+        Component name = MessageUtils.parse(materialname + " " + materialpickaxe);
+        meta.displayName(name);
+        meta.lore(List.of(
+                MessageUtils.parse("<gray>Breaks 9 Blocks at Once"),
+                Component.empty(),
+                MessageUtils.parse("<#FFFF00>Click to get")));
+        meta.setEnchantmentGlintOverride(true);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
@@ -77,15 +76,16 @@ public class AmethystToolCopperMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        String materialname = plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ");
-        String materialshovel = plugin.getConfig().getString("item.item-shovel", "&5ѕʜᴏᴠᴇʟ");
+        String materialname = plugin.getConfig().getString("item.item-name", "<dark_purple>ᴀᴍᴇᴛʜʏѕᴛ");
+        String materialshovel = plugin.getConfig().getString("item.item-shovel", "<dark_purple>ѕʜᴏᴠᴇʟ");
 
-        String name = color(materialname + " " + materialshovel);
-        meta.setDisplayName(name);
-        meta.setLore(List.of("§7Breaks 9 Blocks at Once",
-                "",
-                color("&#FFFF00Click to get")));
-        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+        Component name = MessageUtils.parse(materialname + " " + materialshovel);
+        meta.displayName(name);
+        meta.lore(List.of(
+                MessageUtils.parse("<gray>Breaks 9 Blocks at Once"),
+                Component.empty(),
+                MessageUtils.parse("<#FFFF00>Click to get")));
+        meta.setEnchantmentGlintOverride(true);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
@@ -99,15 +99,16 @@ public class AmethystToolCopperMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        String materialname = plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ");
-        String materialaxe = plugin.getConfig().getString("item.item-axe", "&5ᴀхᴇ");
+        String materialname = plugin.getConfig().getString("item.item-name", "<dark_purple>ᴀᴍᴇᴛʜʏѕᴛ");
+        String materialaxe = plugin.getConfig().getString("item.item-axe", "<dark_purple>ᴀхᴇ");
 
-        String name = color(materialname + " " + materialaxe);
-        meta.setDisplayName(name);
-        meta.setLore(List.of("§7Breaks 9 Blocks at Once",
-                "",
-                color("&#FFFF00Click to get")));
-        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+        Component name = MessageUtils.parse(materialname + " " + materialaxe);
+        meta.displayName(name);
+        meta.lore(List.of(
+                MessageUtils.parse("<gray>Breaks 9 Blocks at Once"),
+                Component.empty(),
+                MessageUtils.parse("<#FFFF00>Click to get")));
+        meta.setEnchantmentGlintOverride(true);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
@@ -120,10 +121,10 @@ public class AmethystToolCopperMenu implements Listener {
 
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        String previouspage = plugin.getConfig().getString("menus.item-previous", "&e<- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ");
+        String previouspage = plugin.getConfig().getString("menus.item-previous", "<yellow><- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ");
 
-        String name = color(previouspage);
-        meta.setDisplayName(name);
+        Component name = MessageUtils.parse(previouspage);
+        meta.displayName(name);
 
         item.setItemMeta(meta);
         return item;
@@ -153,18 +154,5 @@ public class AmethystToolCopperMenu implements Listener {
             }
             case 18 -> player.openInventory(new AmethystToolMainMenu(plugin).create(player));
         }
-    }
-
-
-    private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
-
-    public static String color(String text) {
-        Matcher matcher = HEX_PATTERN.matcher(text);
-        while (matcher.find()) {
-            String hex = matcher.group(1);
-            text = text.replace("&#" + hex,
-                    net.md_5.bungee.api.ChatColor.of("#" + hex).toString());
-        }
-        return ChatColor.translateAlternateColorCodes('&', text);
     }
 }

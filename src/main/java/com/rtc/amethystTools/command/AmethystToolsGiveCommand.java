@@ -156,7 +156,7 @@ public class AmethystToolsGiveCommand {
             pdc.set(AmethystTools.KEY_TIER, PersistentDataType.STRING, argtier);
             pdc.set(AmethystTools.KEY_TYPE, PersistentDataType.STRING, argtype);
 
-            meta.displayName(MessageUtils.parse(plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName).decoration(TextDecoration.ITALIC, false));
+            meta.displayName(MessageUtils.parse(plugin.getConfig().getString("item.item-name", "&5ᴀᴍᴇᴛʜʏѕᴛ") + " " + toolDisplayName));
 
             meta.setLore(List.of("§7Breaks 9 Blocks at Once"));
             meta.setCustomModelData(2235897);

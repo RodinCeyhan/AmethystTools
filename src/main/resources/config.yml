@@ -93,11 +93,11 @@ item:
 
 menus:
   menu-main: "<dark_purple>Amethyst Tools"
-  menu-wooden: "&#A0522DWooden Tools"
-  menu-stone: "&#7D7D7DStone Tools"
-  menu-iron: "&#DADADAIron Tools"
-  menu-copper: "&#C87533Copper Tools" # Only 1.21.9+
-  menu-golden: "&#FFD700Golden Tools"
-  menu-diamond: "&#4EE1D8Diamond Tools"
-  menu-netherite: "&#2B2B2FNetherite Tools"
+  menu-wooden: "<#A0522D>Wooden Tools"
+  menu-stone: "<#7D7D7D>Stone Tools"
+  menu-iron: "<#DADADA>Iron Tools"
+  menu-copper: "<#C87533>Copper Tools" # Only 1.21.9+
+  menu-golden: "<#FFD700>Golden Tools"
+  menu-diamond: "<#4EE1D8>Diamond Tools"
+  menu-netherite: "<#2B2B2F>Netherite Tools"
   item-previous: "<yellow><- ᴘʀᴇᴠɪᴏᴜѕ ᴘᴀɢᴇ"
