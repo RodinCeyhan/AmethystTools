@@ -2,11 +2,8 @@
 package com.rtc.amethystTools.event;
 
 import com.rtc.amethystTools.AmethystTools;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Tag;
+import com.rtc.amethystTools.utils.ToolUtils;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -15,14 +12,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted", "UnnecessaryReturnStatement"})
 public class AmethystToolBlockBreak implements Listener {
@@ -72,7 +68,7 @@ public class AmethystToolBlockBreak implements Listener {
 
         ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (!isAmethystTool(tool)) {
+        if (!ToolUtils.isAmethystTool(tool)) {
             return;
         }
 
@@ -138,7 +134,7 @@ public class AmethystToolBlockBreak implements Listener {
             return;
         }
 
-        if (!isAmethystTool(player.getInventory().getItemInMainHand())) {
+        if (!ToolUtils.isAmethystTool(player.getInventory().getItemInMainHand())) {
             return;
         }
 
@@ -404,18 +400,14 @@ public class AmethystToolBlockBreak implements Listener {
     private void playAmethystEffects(Block block) {
         var location = block.getLocation().add(0.5, 0.5, 0.5);
 
-        block.getWorld().playSound(location, Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1.0f, 1.0f);
-        block.getWorld().spawnParticle(Particle.PORTAL, location, 20, 0.35, 0.35, 0.35, 0.0);
-    }
-
-    private boolean isAmethystTool(ItemStack item) {
-        if (item == null || item.getType().isAir() || !item.hasItemMeta()) {
-            return false;
+        if (plugin.getConfig().getBoolean("break-sound", true)) {
+            float pitch = ThreadLocalRandom.current().nextInt(10, 21) / 10.0f;
+            block.getWorld().playSound(location, Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1.0f, pitch);
         }
 
-        ItemMeta meta = item.getItemMeta();
-
-        return meta.getPersistentDataContainer().has(AmethystTools.KEY_TOOL, PersistentDataType.BYTE) || (meta.hasCustomModelData() && meta.getCustomModelData() == 2235897);
+        if (plugin.getConfig().getBoolean("break-particles", true)) {
+            block.getWorld().spawnParticle(Particle.PORTAL, location, 20, 0.35, 0.35, 0.35, 0.0);
+        }
     }
 
     private ToolKind getToolKind(Material material) {

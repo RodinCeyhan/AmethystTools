@@ -2,19 +2,18 @@
 
 messages:
   only-players: "<red>Only players can use this command."
-  wrong-material: "<red>Please enter a valid material."
-  wrong-tool: "<red>Please enter a valid tool."
-  empyt-arg2: "<red>Please enter a tool type (pickaxe, axe, shovel)."
-  invfull: "<dark_purple>{material} {tool} <red>could not be added to your inventory because it is full."
+  invfull: "{material} {tool} <red>could not be added to your inventory because it is full."
   invfull-actionbar: "<red>Your inventory is full!"
-  reloadplugin: "&aPlugin reload is succesfuly complete."
+  reloadplugin: "&aPlugin reload is successfully complete."
   reloadplugin-actionbar: "&aReloaded Plugin"
-  nopermission: "<red>You don't have permission!"
-  nopermission-actionbar: "<red>You don't have permission!"
-  use-give: "<red>Use: &7/amethysttoolsgive <player> <tier> <type>"
-  player-notfound: "<red>{player} not found."
-  player-notfound-actionbar: "<red>Player not found"
-  enter-tier: "<red>Please enter a tool tier."
+
+# Effects played when Amethyst tools break blocks
+break-particles: true
+break-sound: true
+
+# Allow new enchantments on Amethyst tools (enchanting table and anvil).
+# If false, enchantments the tools already have are kept.
+enable-item-enchant: true
 
 # AmethystTools block-breaking mode
 # OLD: Original 3x3 behavior from the GitHub version
@@ -22,34 +21,6 @@ messages:
 block-breaking-mode: NEW
 
 blacklist-blocks:
-  - DIAMOND_ORE
-  - DEEPSLATE_DIAMOND_ORE
-  - EMERALD_ORE
-  - DEEPSLATE_EMERALD_ORE
-  - IRON_ORE
-  - DEEPSLATE_IRON_ORE
-  - GOLD_ORE
-  - DEEPSLATE_GOLD_ORE
-  - NETHER_GOLD_ORE
-  - COPPER_ORE
-  - DEEPSLATE_COPPER_ORE
-  - COAL_ORE
-  - DEEPSLATE_COAL_ORE
-  - LAPIS_ORE
-  - DEEPSLATE_LAPIS_ORE
-  - REDSTONE_ORE
-  - DEEPSLATE_REDSTONE_ORE
-  - NETHER_QUARTZ_ORE
-  - ANCIENT_DEBRIS
-  - AMETHYST_CLUSTER
-  - LARGE_AMETHYST_BUD
-  - MEDIUM_AMETHYST_BUD
-  - SMALL_AMETHYST_BUD
-  - GILDED_BLACKSTONE
-  - RAW_IRON_BLOCK
-  - RAW_GOLD_BLOCK
-  - RAW_COPPER_BLOCK
-
   - CHEST
   - TRAPPED_CHEST
   - SHULKER_BOX
