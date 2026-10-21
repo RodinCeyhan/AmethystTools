@@ -19,6 +19,11 @@ public class GrindstoneListener implements Listener {
         ItemStack source = ToolUtils.isAmethystTool(upper) ? upper : ToolUtils.isAmethystTool(lower) ? lower : null;
         if (source == null) return;
 
+        if (!ToolUtils.isRepairAllowed() && ToolUtils.isRepair(source, result)) {
+            e.setResult(null);
+            return;
+        }
+
         ItemMeta original = source.getItemMeta();
         result.editMeta(meta -> {
             meta.displayName(original.displayName());

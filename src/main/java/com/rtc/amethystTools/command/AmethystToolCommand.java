@@ -170,6 +170,8 @@ public class AmethystToolCommand {
                 if (type == null) continue;
 
                 assert item != null;
+                if (ToolUtils.isRenamed(item)) continue;
+
                 item.editMeta(meta -> meta.displayName(MessageUtils.parse(itemName + " " + toolName(type))));
             }
         }

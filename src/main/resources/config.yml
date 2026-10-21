@@ -11,6 +11,26 @@ messages:
 break-particles: true
 break-sound: true
 
+# Pitches used by the break sound. One of them is picked at random for every swing and
+# the same note is used for all blocks broken by that swing, so the sound never clashes.
+# Keep the values on one musical scale (default: major pentatonic). Valid range: 0.5 - 2.0
+break-sound-pitches:
+  - 1.0
+  - 1.1225
+  - 1.2599
+  - 1.4983
+  - 1.6818
+  - 1.8877
+  - 2.0
+
+# Allow Amethyst tools to be repaired (anvil, grindstone, crafting grid, Mending and experience bottles).
+# If false, any action that would restore durability is blocked.
+allow-item-repair: true
+
+# Allow Amethyst tools to be renamed in an anvil.
+# If false, the tool always keeps its configured name.
+allow-item-rename: false
+
 # Allow new enchantments on Amethyst tools (enchanting table and anvil).
 # If false, enchantments the tools already have are kept.
 enable-item-enchant: true

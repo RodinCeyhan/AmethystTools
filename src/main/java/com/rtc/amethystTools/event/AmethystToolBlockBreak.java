@@ -1,4 +1,3 @@
-
 package com.rtc.amethystTools.event;
 
 import com.rtc.amethystTools.AmethystTools;
@@ -16,8 +15,11 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted", "UnnecessaryReturnStatement"})
@@ -25,7 +27,11 @@ public class AmethystToolBlockBreak implements Listener {
 
     private final AmethystTools plugin;
 
-    private final Set<UUID> processingPlayers = new HashSet<>();
+    private final Map<UUID, Swing> swings = new ConcurrentHashMap<>();
+
+    private static final double[] DEFAULT_BREAK_PITCHES = {1.0, 1.1225, 1.2599, 1.4983, 1.6818, 1.8877, 2.0};
+    private static final double MIN_PITCH = 0.5;
+    private static final double MAX_PITCH = 2.0;
 
     private static final int MAX_TREE_BLOCKS = 64;
     private static final int MAX_TREE_SCAN = 4096;
@@ -33,6 +39,17 @@ public class AmethystToolBlockBreak implements Listener {
 
     private enum ToolKind {
         PICKAXE, SHOVEL, AXE, OTHER
+    }
+
+    private static final class Swing {
+        private final float pitch;
+        private final Location soundLocation;
+        private boolean soundPlayed;
+
+        private Swing(float pitch, Location soundLocation) {
+            this.pitch = pitch;
+            this.soundLocation = soundLocation;
+        }
     }
 
     public AmethystToolBlockBreak(AmethystTools plugin) {
@@ -62,7 +79,7 @@ public class AmethystToolBlockBreak implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        if (processingPlayers.contains(uuid)) {
+        if (swings.containsKey(uuid)) {
             return;
         }
 
@@ -82,7 +99,7 @@ public class AmethystToolBlockBreak implements Listener {
             return;
         }
 
-        processingPlayers.add(uuid);
+        swings.put(uuid, new Swing(pickBreakPitch(), center.getLocation().add(0.5, 0.5, 0.5)));
 
         try {
             ToolKind kind = getToolKind(tool.getType());
@@ -122,7 +139,7 @@ public class AmethystToolBlockBreak implements Listener {
             }
 
         } finally {
-            processingPlayers.remove(uuid);
+            swings.remove(uuid);
         }
     }
 
@@ -130,7 +147,7 @@ public class AmethystToolBlockBreak implements Listener {
     public void onOriginalBlockBreakEffects(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        if (processingPlayers.contains(player.getUniqueId())) {
+        if (swings.containsKey(player.getUniqueId())) {
             return;
         }
 
@@ -222,7 +239,7 @@ public class AmethystToolBlockBreak implements Listener {
         }
 
         if (fireBreakEventAndBreak(block, player, tool)) {
-            playAmethystEffects(block);
+            playAmethystEffects(block, player);
         }
     }
 
@@ -302,7 +319,7 @@ public class AmethystToolBlockBreak implements Listener {
         }
 
         if (fireBreakEventAndBreak(block, player, tool)) {
-            playAmethystEffects(block);
+            playAmethystEffects(block, player);
         }
     }
 
@@ -367,7 +384,7 @@ public class AmethystToolBlockBreak implements Listener {
         ItemStack tool = player.getInventory().getItemInMainHand();
 
         if (isLog(start.getType()) && fireBreakEventAndBreak(start, player, tool)) {
-            playAmethystEffects(start);
+            playAmethystEffects(start, player);
         }
 
         for (Block log : logs) {
@@ -376,7 +393,7 @@ public class AmethystToolBlockBreak implements Listener {
             }
 
             if (fireBreakEventAndBreak(log, player, tool)) {
-                playAmethystEffects(log);
+                playAmethystEffects(log, player);
             }
         }
     }
@@ -397,17 +414,33 @@ public class AmethystToolBlockBreak implements Listener {
         return block.breakNaturally(tool);
     }
 
-    private void playAmethystEffects(Block block) {
+    private void playAmethystEffects(Block block, Player player) {
         var location = block.getLocation().add(0.5, 0.5, 0.5);
 
-        if (plugin.getConfig().getBoolean("break-sound", true)) {
-            float pitch = ThreadLocalRandom.current().nextInt(10, 21) / 10.0f;
-            block.getWorld().playSound(location, Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1.0f, pitch);
+        Swing swing = swings.get(player.getUniqueId());
+
+        if (swing != null && !swing.soundPlayed && plugin.getConfig().getBoolean("break-sound", true)) {
+            swing.soundPlayed = true;
+            block.getWorld().playSound(swing.soundLocation, Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1.0f, swing.pitch);
         }
 
         if (plugin.getConfig().getBoolean("break-particles", true)) {
             block.getWorld().spawnParticle(Particle.PORTAL, location, 20, 0.35, 0.35, 0.35, 0.0);
         }
+    }
+
+    private float pickBreakPitch() {
+        List<Double> configured = plugin.getConfig().getDoubleList("break-sound-pitches");
+
+        double pitch;
+
+        if (configured.isEmpty()) {
+            pitch = DEFAULT_BREAK_PITCHES[ThreadLocalRandom.current().nextInt(DEFAULT_BREAK_PITCHES.length)];
+        } else {
+            pitch = configured.get(ThreadLocalRandom.current().nextInt(configured.size()));
+        }
+
+        return (float) Math.clamp(pitch, MIN_PITCH, MAX_PITCH);
     }
 
     private ToolKind getToolKind(Material material) {

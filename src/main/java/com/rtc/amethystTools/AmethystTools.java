@@ -4,8 +4,10 @@ import com.rtc.amethystTools.command.AmethystToolCommand;
 import com.rtc.amethystTools.event.AmethystToolBlockBreak;
 import com.rtc.amethystTools.listener.AmethystToolHoldSound;
 import com.rtc.amethystTools.listener.AnvilListener;
+import com.rtc.amethystTools.listener.CraftingListener;
 import com.rtc.amethystTools.listener.EnchantListener;
 import com.rtc.amethystTools.listener.GrindstoneListener;
+import com.rtc.amethystTools.listener.MendingListener;
 import com.rtc.amethystTools.menu.ToolMenus;
 import com.rtc.amethystTools.utils.ConfigMigrator;
 import com.rtc.amethystTools.utils.UpdateChecker;
@@ -59,6 +61,8 @@ public final class AmethystTools extends JavaPlugin implements Listener {
     public static NamespacedKey KEY_TOOL;
     public static NamespacedKey KEY_TIER;
     public static NamespacedKey KEY_TYPE;
+    public static NamespacedKey KEY_RENAMED;
+    public static NamespacedKey KEY_DAMAGE_FLOOR;
 
     @Override
     public void onEnable() {
@@ -69,6 +73,8 @@ public final class AmethystTools extends JavaPlugin implements Listener {
         KEY_TOOL = new NamespacedKey(this, "amethyst_tool");
         KEY_TIER = new NamespacedKey(this, "amethyst_tier");
         KEY_TYPE = new NamespacedKey(this, "amethyst_type");
+        KEY_RENAMED = new NamespacedKey(this, "amethyst_renamed");
+        KEY_DAMAGE_FLOOR = new NamespacedKey(this, "amethyst_damage_floor");
 
         getServer().getPluginManager().registerEvents(this, this);
 
@@ -100,6 +106,10 @@ public final class AmethystTools extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(new AnvilListener(), this);
         getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
+        getServer().getPluginManager().registerEvents(new CraftingListener(), this);
+        MendingListener mendingListener = new MendingListener(this);
+        getServer().getPluginManager().registerEvents(mendingListener, this);
+        mendingListener.startForOnlinePlayers();
     }
 
     private final ToolMenus toolMenus = new ToolMenus(this);

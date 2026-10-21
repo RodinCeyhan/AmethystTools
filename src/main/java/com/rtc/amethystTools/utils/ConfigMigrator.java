@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("ALL")
 public final class ConfigMigrator {
 
-    private static final List<String> REQUIRED_KEYS = List.of("block-breaking-mode", "break-particles", "break-sound", "enable-item-enchant", "blacklist-blocks");
+    private static final List<String> REQUIRED_KEYS = List.of("block-breaking-mode", "break-particles", "break-sound", "break-sound-pitches", "allow-item-repair", "allow-item-rename", "enable-item-enchant", "blacklist-blocks");
     private static final String MESSAGES = "messages";
 
     private static final Pattern CHILD_KEY = Pattern.compile("^(\\s+)[\"']?([A-Za-z0-9_.\\-]+)[\"']?\\s*:(?:\\s.*)?$");
